@@ -58,13 +58,8 @@ class RomanNumerals:
         return sum(out)
 
 
+assert RomanNumerals.to_roman(1000) == 'M', '1000 should == "M"'
+assert RomanNumerals.to_roman(1990) == 'MCMXC', '1990 should == "MCMXC"'
 
-print(RomanNumerals().from_roman('MCMXC'))
-
-#
-#
-# assert RomanNumerals().to_roman(1000) == 'M', '1000 should == "M"'
-# assert RomanNumerals().to_roman(1990) == 'MCMXC', '1990 should == "MCMXC"'
-#
-# assert RomanNumerals().to_roman('XXI') == 21, 'XXI should == 21'
-# assert RomanNumerals().to_roman('MMVIII') == 2008, 'MMVIII should == 2008'
+assert RomanNumerals.from_roman('XXI') == 21, 'XXI should == 21'
+assert RomanNumerals.from_roman('MMVIII') == 2008, 'MMVIII should == 2008'
