@@ -4,48 +4,62 @@ class RomanNumerals:
 
     arab = {v: k for k, v in roman.items()}
 
-    def _get_arab_from_dic(self, x):
-        print(x)
+    @classmethod
+    def _get_arab_from_dic(cls, x):
         near = 0
         int_x = int(x)
-        for key, val in self.arab.items():
+        for key, val in cls.arab.items():
             if near <= key:
                 near = key
             if key == int_x:
                 return val
         if len(x) == 2:
             if 10 <= int_x < 40:
-                return self.arab[10] * int(x[:1])
+                return cls.arab[10] * int(x[:1])
             else:
-                return self.arab[50] + self.arab[10] * (int(x[:1]) - 5)
+                return cls.arab[50] + cls.arab[10] * (int(x[:1]) - 5)
         elif len(x) == 3:
             if 100 <= int_x < 400:
-                return self.arab[100] * int(x[:1])
+                return cls.arab[100] * int(x[:1])
             else:
-                return self.arab[500] + self.arab[100] * (int(x[:1]) - 5)
+                return cls.arab[500] + cls.arab[100] * (int(x[:1]) - 5)
         else:
-            return self.arab[1000] * int(x[3:])
+            return cls.arab[1000] * int(x[:1])
 
-    def to_roman(self, x):
+    @classmethod
+    def to_roman(cls, x):
         inp = str(x)[::-1]
         out = []
         for i in range(0, len(inp)):
             curr = inp[i] + '0' * i
-            if i == 0 and inp[i] == '0':
+            if inp[i] == '0':
                 continue
-            elif inp[i] == '0':
-                curr = '1' + curr
-            out.append(self._get_arab_from_dic(curr))
+            out.append(cls._get_arab_from_dic(curr))
         return ''.join(out[::-1])
 
+    @classmethod
+    def from_roman(cls, x):
+        if not x:
+            return 0
+        out = []
+        len_x = len(x)
+        next_iter = False
+        for i in range(len_x):
+            if next_iter:
+                next_iter = False
+                continue
+            if (x[i] == 'I' and i + 1 != len_x and x[i + 1] in ('V', 'X')) or\
+               (x[i] == 'X' and i + 1 != len_x and x[i + 1] in ('L', 'C')) or \
+               (x[i] == 'C' and i + 1 != len_x and x[i + 1] in ('D', 'M')):
+                next_iter = True
+                out.append(cls.roman[x[i] + x[i + 1]])
+            else:
+                out.append(cls.roman[x[i]])
+        return sum(out)
 
 
 
-    def from_roman(self, x):
-        pass
-
-
-print(RomanNumerals().to_roman(2008))
+print(RomanNumerals().from_roman('MCMXC'))
 
 #
 #
