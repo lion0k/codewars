@@ -22,11 +22,9 @@ def _last_digit(n1, n2):
     last_n2 = last_n2[len(last_n2) - 2:len(last_n2) + 1]
     if last_n2.startswith('0'):
         last_n2 = '{}{}'.format(1, last_n2)
-    # print(last_n1, last_n1.startswith('0'))
     if last_n1.startswith('0'):
         last_n1 = '{}{}'.format(1, last_n1)
 
-    # print('last1 - ', last_n1, 'last2 - ', last_n2)
     return int(str(int(last_n1) ** int(last_n2)))
 
 
@@ -35,7 +33,7 @@ def last_digit(lst):
         return 1
 
     lst.reverse()
-    return str(reduce(_last_digit, lst[1:], lst[0]))[-1]
+    return int(str(reduce(_last_digit, lst[1:], lst[0]))[-1])
 
 
 test_data = [
@@ -55,6 +53,4 @@ test_data = [
 ]
 
 for data, res in test_data:
-    print(last_digit(data), 'res ', res)
-
-# print(_last_digit(123232, 92))
+    assert last_digit(data) == res, data
