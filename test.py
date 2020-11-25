@@ -1,25 +1,69 @@
-order = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+from collections import Counter
 
-def is_numerical_order(l: list) -> bool:
-    first = order.index(l[0])
-    if first == 9:
-        return False
-    return order[first:first + 5] == l
+def play(cards):
+    order = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 
+    def is_royal_flush(items: list) -> bool:
+        return ''.join(items) == '10JQKA'
 
+    def is_numerical_order(items: list) -> bool:
+        first = order.index(items[0])
+        if first == 9:
+            return False
+        return order[first:first + 5] == items
 
-x = '10C JC QC KC AC'.split()
-num = [i[:-1] for i in x]
-num.sort(key=lambda v: order.index(v))
-suit = set(i[-1] for i in x)
+    def is_four_of_kind(items: dict) -> bool:
+        return 4 in items.values()
 
-if len(suit) == 1:
-    if ''.join(num) == '10JQKA':
-        print('Royal Flush')
-    # elif:
+    def is_full_house(items: dict) -> bool:
+        return (len(items) == 2) and (3 in items.values())
 
+    def is_three_of_kind(items: dict) -> bool:
+        return 3 in items.values()
 
-print(is_numerical_order(['10', 'J', 'Q', 'K', 'A']))
+    def is_two_pairs(items: dict) -> bool:
+        return (len(items) == 3) and (2 in items.values())
+
+    def is_pair(items: dict) -> bool:
+        return 2 in items.values()
+
+    x = cards.split()
+    num = [i[:-1] for i in x]
+    num.sort(key=lambda v: order.index(v))
+    num_c = Counter(num)
+    suit = set(i[-1] for i in x)
+
+    if len(suit) == 1:
+        if is_royal_flush(num):
+            # print('Royal Flush')
+            return 'Royal Flush'
+        elif is_numerical_order(num):
+            # print('Straight Flush')
+            return 'Straight Flush'
+        else:
+            # print('Flush')
+            return 'Flush'
+    else:
+        if is_four_of_kind(num_c):
+            # print('Four of a Kind')
+            return 'Four of a Kind'
+        elif is_full_house(num_c):
+            # print('Full House')
+            return 'Full House'
+        elif is_numerical_order(num):
+            # print('Straight')
+            return 'Straight'
+        elif is_three_of_kind(num_c):
+            # print('Three of a Kind')
+            return 'Three of a Kind'
+        elif is_two_pairs(num_c):
+            # print('Two Pairs')
+            return 'Two Pairs'
+        elif is_pair(num_c):
+            # print('Pair')
+            return 'Pair'
+        # print('High Card')
+        return 'High Card'
 
 
 tests = {'10C JC QC KC AC': 'Royal Flush',
@@ -72,3 +116,6 @@ tests = {'10C JC QC KC AC': 'Royal Flush',
          '7S 8C 5C 10D 3S': 'High Card',
          '10D 9H JC KS 3C': 'High Card',
          '4H 8C AC 7D QD': 'High Card'}
+
+for k, v in tests.items():
+    assert play(k) == v, play(k) + ' ' + k
